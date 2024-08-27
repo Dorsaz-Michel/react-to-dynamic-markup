@@ -160,7 +160,14 @@ ${this.#listeners.join('\n\n')}
      *
      * The createComponent callback is called whenever a component is created
      *
-     * Ex: setCreateComponentCallback(async (component, props) => component(props));
+     * It can be used by example to add document as second property of any component created
+     *
+     * Ex: setCreateComponentCallback(async (component, props) => component(props, doc));
+     *
+     * Note: It doesn't affect root component ! But you can do it by calling root component as a function when
+     * using renderToDynamicMarkup:
+     *
+     * EX: use: renderToDynamicMarkup(Page({ id: "page"}, document)) instead of: renderToDynamicMarkup(<Page id="page" />)
      *
      * @param {(component:Object, props:Object) => Promise<Object>} createComponent
      */
