@@ -78,7 +78,7 @@ app.use('/renderToStaticMarkup', async (request, response) => {
 
 app.use('/renderToDynamicMarkup', async (request, response) => {
 
-    doc = new Document();
+    const doc = new Document();
 
     doc
         .setTitle("Hello world")
@@ -92,7 +92,7 @@ app.use('/renderToDynamicMarkup', async (request, response) => {
         .addBodyScript({}, () => console.log("Hello World!"))
         .setNoScript("Unable to run scripts !")
     
-    const html = await doc.renderToDynamicMarkup(<Page/>, );
+    const html = await doc.renderToDynamicMarkup(<Page/>);
     response.send(html);
 });
 
