@@ -67,7 +67,7 @@ const express = require("express");
 const {renderToStaticMarkup} = require("react-dom/server");
 const React = require("react");
 const app = express();
-const Document = require("render-to-dynamic-markup");
+const Document = require("react-to-dynamic-markup");
 
 const Page = require('./Page'); // Importer le composant React
 
@@ -158,10 +158,6 @@ After creating a document you can use the setCreateComponentCallback function. T
 Let say you want to pass the document itself as the second argument to any JSX component, to allow components to edit the document:
 
 ```
-const Logger = require("myLogger");
-
-const logger = new Logger();
-
 const doc = new Document();
 doc.setCreateComponentCallback(async (component, props) => component(props, doc));
 ...
