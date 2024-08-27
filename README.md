@@ -67,7 +67,7 @@ const express = require("express");
 const {renderToStaticMarkup} = require("react-dom/server");
 const React = require("react");
 const app = express();
-const Document = require("render-to-dynamic-markup");
+const Document = require("react-to-dynamic-markup");
 
 const Page = require('./Page'); // Importer le composant React
 
