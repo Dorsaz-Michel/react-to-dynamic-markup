@@ -21,5 +21,7 @@
   ],
   "author": "Michel Dorsaz",
   "license": "MIT",
-  "description": "Tools to transform a React element into a valid HTML string which includes a setup script for listeners (server-side hydration)"
+  "description": "Tools to transform a React element into a valid HTML string which includes a setup script for listeners (server-side hydration)",
+  "dependencies": {
+  }
 }
