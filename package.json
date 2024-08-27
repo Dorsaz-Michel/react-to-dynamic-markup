@@ -1,0 +1,25 @@
+{
+  "name": "react-to-dynamic-markup",
+  "version": "1.0.0",
+  "exports": {
+    "node": {
+      "module": "./import/Document.js",
+      "require": "./require/Document.js"
+    },
+    "default": "./import/Document.js"
+  },
+  "scripts": {
+    "update-folder": "node updateFolder.js"
+  },
+  "keywords": [
+    "JS",
+    "JSX",
+    "React",
+    "SSR",
+    "server-side hydration",
+    "renderToStaticMarkup"
+  ],
+  "author": "Michel Dorsaz",
+  "license": "MIT",
+  "description": "Tools to transform a React element into a valid HTML string which includes a setup script for listeners (server-side hydration)"
+}
