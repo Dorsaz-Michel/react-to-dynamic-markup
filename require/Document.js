@@ -55,10 +55,10 @@ module.exports = class Document {
             <html lang='${this.#lang}'>
                 <head>
                     <title>${this.#title}</title>
-                    ${this.#metas.join("\n")}
-                    ${this.#links.join("\n")}
-                    ${this.#styles.join("\n")}
-                    ${this.#headerScripts.join("\n")}
+                    ${(await Promise.all(this.#metas)).join("\n")}
+                    ${(await Promise.all(this.#links)).join("\n")}
+                    ${(await Promise.all(this.#styles)).join("\n")}
+                    ${(await Promise.all(this.#headerScripts)).join("\n")}
                 </head>
                 <body>
                     ${await this.#renderToString(reactElement)}
@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', function() {
 ${this.#listeners.join('\n\n')}
 });
                     </script>
-                    ${this.#bodyScripts.join("\n")}
+                    ${(await Promise.all(this.#bodyScripts)).join("\n")}
                     <noscript>${this.#noScript}</noscript>
                 </body>
             </html>
