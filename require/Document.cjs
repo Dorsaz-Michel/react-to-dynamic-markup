@@ -147,7 +147,7 @@ ${this.#listeners.join('\n\n')}
                         html += " " + key;
                 }
 
-                else if (typeof key !== "symbol") {
+                else if (typeof value !== "symbol") {
                     if (key === "className")
                         key = "class";
 
