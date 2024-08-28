@@ -90,9 +90,8 @@ ${this.#listeners.join('\n\n')}
             return String(element);
 
 
-        let html = "";
-
         if (element instanceof Array) {
+            let html = "";
             for (const el of element) {
                 html += await this.#renderToString(el);
             }
@@ -101,6 +100,19 @@ ${this.#listeners.join('\n\n')}
 
 
         let { type, props = {} } = element;
+
+
+        // manage symbols
+        if (typeof type === "symbol") {
+            let html = "";
+
+            if (props.children)
+                for (const child of props.children)
+                    html += await this.#renderToString(child);
+
+            return html;
+        }
+
 
         // Manage functional components
         if (typeof type === 'function') {
@@ -111,26 +123,41 @@ ${this.#listeners.join('\n\n')}
         }
 
 
-        if (typeof type !== "symbol")
-            html += `<${type}`;
+        return await this.#parseTag(type, props);
+    }
 
+    async #parseTag(type, attributes) {
 
-        let children = [];
-        const eventListeners = [];
-        Object.entries(props).forEach(([key, value]) => {
+        let html = `<${type}`;
+
+        let children = "";
+        let eventListeners = [];
+        Object.entries(attributes).forEach(([key, value]) => {
             if (key === "children")
                 children = value;
-            else if (key.toLowerCase().startsWith('on') && typeof value === "function")
-                eventListeners.push({ type: key.substring(2).toLowerCase(), listener: value.toString()})
             else {
-                if (key === "className")
-                    key = "class";
 
-                html += ` ${key}="${value}"`;
+                if (key.toLowerCase().startsWith('on') && typeof value === "function")
+                    eventListeners.push({type: key.substring(2).toLowerCase(), listener: value.toString()});
+
+                else if (key.toLowerCase() === "style" && typeof value === "object")
+                    html += ` style="${Object.entries(value).map(([key, value]) => `${key}:${value.toString()}`).join(';')}"`;
+
+                else if (typeof value === "boolean") {
+                    if (value === true)
+                        html += " " + key;
+                }
+
+                else {
+                    if (key === "className")
+                        key = "class";
+
+                    html += ` ${key}="${value}"`;
+                }
             }
         })
 
-        if (typeof type !== "symbol" && eventListeners.length > 0) {
+        if (eventListeners.length > 0) {
 
             let identifier = `${type}_${this.#identifier++}`;
 
@@ -142,15 +169,7 @@ ${this.#listeners.join('\n\n')}
             );
         }
 
-        if (typeof type !== "symbol")
-            html += ">";
-
-        for (const child of children)
-            html += await this.#renderToString(child);
-
-        if (typeof type !== "symbol")
-            html += `</${type}>`;
-
+        html += `>${await this.#renderToString(children)}</${type}>`;
 
         return html;
     }
@@ -211,13 +230,7 @@ ${this.#listeners.join('\n\n')}
      * @param {{[p:string]: string|boolean}} attributes
      */
     addMeta(attributes) {
-        this.#metas.push(`<meta ${Object.entries(attributes).map(([key, value]) => {
-            if (value === true)
-                return key;
-            else
-                return `${key}="${value}"`;
-        }).join(' ')}/>`);
-
+        this.#metas.push(this.#parseTag("meta", attributes));
         return this;
     }
 
@@ -230,13 +243,7 @@ ${this.#listeners.join('\n\n')}
      * @param {{[p:string]: string|boolean}} attributes
      */
     addLink(attributes) {
-        this.#links.push(`<link ${Object.entries(attributes).map(([key, value]) => {
-            if (value === true)
-                return key;
-            else
-                return `${key}="${value}"`;
-        }).join(' ')}/>`);
-
+        this.#links.push(this.#parseTag("link", attributes));
         return this;
     }
 
@@ -254,13 +261,10 @@ ${this.#listeners.join('\n\n')}
      * @param {string} content
      */
     addStyle(attributes, content = "") {
-        this.#styles.push(`<style ${Object.entries(attributes).map(([key, value]) => {
-            if (value === true)
-                return key;
-            else
-                return `${key}="${value}"`;
-        }).join(' ')}>${content}</style>`);
+        if (content)
+            attributes.children = content;
 
+        this.#styles.push(this.#parseTag("style", attributes));
         return this;
     }
 
@@ -278,20 +282,10 @@ ${this.#listeners.join('\n\n')}
      * @param {Function} content
      */
     addHeaderScript(attributes, content = null) {
-
-        let scriptContent = "";
-
         if (typeof content === "function")
-            scriptContent = `document.addEventListener('DOMContentLoaded', ${content.toString()});`;
+            attributes.children = `document.addEventListener('DOMContentLoaded', ${content.toString()});`;
 
-
-        this.#headerScripts.push(`<script ${Object.entries(attributes).map(([key, value]) => {
-            if (value === true)
-                return key;
-            else
-                return `${key}="${value}"`;
-        }).join(' ')}>${scriptContent}</script>`);
-
+        this.#headerScripts.push(this.#parseTag("script", attributes));
         return this;
     }
 
@@ -309,20 +303,10 @@ ${this.#listeners.join('\n\n')}
      * @param {Function} content
      */
     addBodyScript(attributes, content = null) {
-
-        let scriptContent = "";
-
         if (typeof content === "function")
-            scriptContent = `document.addEventListener('DOMContentLoaded', ${content.toString()});`;
+            attributes.children = `document.addEventListener('DOMContentLoaded', ${content.toString()});`;
 
-
-        this.#bodyScripts.push(`<script ${Object.entries(attributes).map(([key, value]) => {
-            if (value === true)
-                return key;
-            else
-                return `${key}="${value}"`;
-        }).join(' ')}>${scriptContent}</script>`);
-
+        this.#bodyScripts.push(this.#parseTag("script", attributes));
         return this;
     }
 
@@ -339,5 +323,7 @@ ${this.#listeners.join('\n\n')}
         return this;
     }
 }
+
+
 
 
