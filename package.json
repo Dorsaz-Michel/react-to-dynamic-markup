@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "exports": {
     "node": {
-      "module": "./import/Document.js",
+      "import": "./import/Document.js",
       "require": "./require/Document.js"
     },
     "default": "./import/Document.js"
