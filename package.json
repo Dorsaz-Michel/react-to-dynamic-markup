@@ -1,10 +1,11 @@
 {
   "name": "react-to-dynamic-markup",
   "version": "1.0.0",
+  "type": "module",
   "exports": {
     "node": {
       "import": "./import/Document.js",
-      "require": "./require/Document.js"
+      "require": "./require/Document.cjs"
     },
     "default": "./import/Document.js"
   },
@@ -21,10 +22,5 @@
   ],
   "author": "Michel Dorsaz",
   "license": "MIT",
-  "description": "Tools to transform a React element into a valid HTML string which includes a setup script for listeners (server-side hydration)",
-  "dependencies": {
-  },
-  "peerDependencies": {
-
-  }
+  "description": "Tools to transform a React element into a valid HTML string which includes a setup script for listeners (server-side hydration)"
 }
