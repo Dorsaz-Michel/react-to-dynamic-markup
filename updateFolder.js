@@ -15,12 +15,12 @@ if (!["import", "require"].includes(folder))
 const fs = require('node:fs');
 
 if (folder === "import") {
-    const content = fs.readFileSync("./require/Document.js", { encoding: "utf-8" });
+    const content = fs.readFileSync("./require/Document.cjs", { encoding: "utf-8" });
     fs.writeFileSync("./import/Document.js", content.replace("module.exports =", "export default"));
 }
 else {
     const content = fs.readFileSync("./import/Document.js", { encoding: "utf-8" });
-    fs.writeFileSync("./require/Document.js", content.replace("export default", "module.exports ="));
+    fs.writeFileSync("./require/Document.cjs", content.replace("export default", "module.exports ="));
 }
 
 
