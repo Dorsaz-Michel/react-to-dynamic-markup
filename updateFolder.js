@@ -1,3 +1,5 @@
+import * as fs from "node:fs";
+
 /*
     import/Documents.js and require/Document.js are the same file, except one has
     "export default" and the other "module.exports ="
@@ -12,7 +14,6 @@ const folder = process.argv[2];
 if (!["import", "require"].includes(folder))
     console.log("Invalid folder, expected 'import' or 'require'");
 
-const fs = require('node:fs');
 
 if (folder === "import") {
     const content = fs.readFileSync("./require/Document.cjs", { encoding: "utf-8" });
