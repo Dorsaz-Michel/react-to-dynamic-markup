@@ -107,8 +107,7 @@ ${this.#listeners.join('\n\n')}
             let html = "";
 
             if (props.children)
-                for (const child of props.children)
-                    html += await this.#renderToString(child);
+                html += await this.#renderToString(props.children);
 
             return html;
         }
