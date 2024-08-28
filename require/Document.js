@@ -117,9 +117,9 @@ ${this.#listeners.join('\n\n')}
         // Manage functional components
         if (typeof type === 'function') {
             if (props.children)
-                props.children = await this.#renderToString(props.children);
-
-            return await this.#renderToString(await this.#createComponent(type, props));
+                return await this.#renderToString(await this.#createComponent(type, {...props, children: await this.#renderToString(props.children)}));
+            else
+                return await this.#renderToString(await this.#createComponent(type, props));
         }
 
 
