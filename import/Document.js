@@ -50,6 +50,8 @@ export default class Document {
      */
     async renderToDynamicMarkup(reactElement) {
 
+        const content = await this.#renderToString(reactElement);
+
         return `
             <!DOCTYPE html>
             <html lang='${this.#lang}'>
@@ -61,7 +63,7 @@ export default class Document {
                     ${(await Promise.all(this.#headerScripts)).join("\n")}
                 </head>
                 <body>
-                    ${await this.#renderToString(reactElement)}
+                    ${content}
                     <script>
 document.addEventListener('DOMContentLoaded', function() {
 ${this.#listeners.join('\n\n')}
