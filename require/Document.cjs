@@ -64,12 +64,12 @@ module.exports = class Document {
                 </head>
                 <body>
                     ${content}
+                    ${(await Promise.all(this.#bodyScripts)).join("\n")}
                     <script>
 document.addEventListener('DOMContentLoaded', function() {
 ${this.#listeners.join('\n\n')}
 });
                     </script>
-                    ${(await Promise.all(this.#bodyScripts)).join("\n")}
                     <noscript>${this.#noScript}</noscript>
                 </body>
             </html>
@@ -301,7 +301,7 @@ ${this.#listeners.join('\n\n')}
     }
 
     /**
-     * Add body script
+     * Add body script (at the end of the body, before the listeners)
      *
      * Ex: addBodyScript({ src: "js/vendor/jquery.js", async: true })
      *
