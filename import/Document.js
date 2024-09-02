@@ -289,12 +289,15 @@ ${this.#listeners.join('\n\n')}
      */
     addHeaderScript(attributes, content = null, waitDomContentLoaded = true) {
 
-        if (content) {
-            if (typeof content === "function")
-                content = content.toString();
-
+        if (typeof content === "function") {
             if (waitDomContentLoaded)
                 attributes.children = `document.addEventListener('DOMContentLoaded', ${content});`;
+            else
+                attributes.children = content.toString();
+        }
+        else if (typeof content === "string") {
+            if (waitDomContentLoaded)
+                attributes.children = `document.addEventListener('DOMContentLoaded', () => {${content}});`;
             else
                 attributes.children = content;
         }
@@ -323,12 +326,15 @@ ${this.#listeners.join('\n\n')}
      */
     addBodyScript(attributes, content = null, waitDomContentLoaded = true) {
 
-        if (content) {
-            if (typeof content === "function")
-                content = content.toString();
-
+        if (typeof content === "function") {
             if (waitDomContentLoaded)
                 attributes.children = `document.addEventListener('DOMContentLoaded', ${content});`;
+            else
+                attributes.children = content.toString();
+        }
+        else if (typeof content === "string") {
+            if (waitDomContentLoaded)
+                attributes.children = `document.addEventListener('DOMContentLoaded', () => {${content}});`;
             else
                 attributes.children = content;
         }
