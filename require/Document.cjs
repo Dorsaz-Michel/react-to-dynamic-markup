@@ -284,16 +284,19 @@ ${this.#listeners.join('\n\n')}
      *
      * Result: <script>() => alert("Hello World!")</script>
      * @param {{[p:string]: string|boolean}} attributes
-     * @param {Function} content
+     * @param {Function|string} content
      * @param {boolean} waitDomContentLoaded
      */
     addHeaderScript(attributes, content = null, waitDomContentLoaded = true) {
-        if (typeof content === "function") {
-            if (waitDomContentLoaded)
-                attributes.children = `document.addEventListener('DOMContentLoaded', ${content.toString()});`;
-            else
-                content.toString();
 
+        if (content) {
+            if (typeof content === "function")
+                content = content.toString();
+
+            if (waitDomContentLoaded)
+                attributes.children = `document.addEventListener('DOMContentLoaded', ${content});`;
+            else
+                attributes.children = content;
         }
 
         this.#headerScripts.push(this.#parseTag("script", attributes));
@@ -315,15 +318,19 @@ ${this.#listeners.join('\n\n')}
      *
      * Result: <script>() => alert("Hello World!")</script>
      * @param {{[p:string]: string|boolean}} attributes
-     * @param {Function} content
+     * @param {Function|string} content
      * @param {boolean} waitDomContentLoaded
      */
     addBodyScript(attributes, content = null, waitDomContentLoaded = true) {
-        if (typeof content === "function") {
+
+        if (content) {
+            if (typeof content === "function")
+                content = content.toString();
+
             if (waitDomContentLoaded)
-                attributes.children = `document.addEventListener('DOMContentLoaded', ${content.toString()});`;
+                attributes.children = `document.addEventListener('DOMContentLoaded', ${content});`;
             else
-                content.toString();
+                attributes.children = content;
         }
 
         this.#bodyScripts.push(this.#parseTag("script", attributes));
