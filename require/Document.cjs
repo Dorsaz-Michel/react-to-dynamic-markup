@@ -227,7 +227,7 @@ ${this.#listeners.join('\n\n')}
      *
      * Ex: addMeta({name: "keywords", content: "HTML, CSS, JavaScript"})
      *
-     * Result: <meta name="keywords" content="HTML, CSS, JavaScript">
+     * Result: <meta name="keywords" content="HTML, CSS, JavaScript" />
      * @param {{[p:string]: string|boolean}} attributes
      */
     addMeta(attributes) {
@@ -279,12 +279,22 @@ ${this.#listeners.join('\n\n')}
      * Ex: addHeaderScript({}, () => alert("Hello World!"))
      *
      * Result: <script>document.addEventListener('DOMContentLoaded', () => alert("Hello World!"));</script>
+     *
+     * Ex: addHeaderScript({}, () => alert("Hello World!"), false)
+     *
+     * Result: <script>() => alert("Hello World!")</script>
      * @param {{[p:string]: string|boolean}} attributes
      * @param {Function} content
+     * @param {boolean} waitDomContentLoaded
      */
-    addHeaderScript(attributes, content = null) {
-        if (typeof content === "function")
-            attributes.children = `document.addEventListener('DOMContentLoaded', ${content.toString()});`;
+    addHeaderScript(attributes, content = null, waitDomContentLoaded = true) {
+        if (typeof content === "function") {
+            if (waitDomContentLoaded)
+                attributes.children = `document.addEventListener('DOMContentLoaded', ${content.toString()});`;
+            else
+                content.toString();
+
+        }
 
         this.#headerScripts.push(this.#parseTag("script", attributes));
         return this;
@@ -300,12 +310,21 @@ ${this.#listeners.join('\n\n')}
      * Ex: addBodyScript({}, () => alert("Hello World!"))
      *
      * Result: <script>document.addEventListener('DOMContentLoaded', () => alert("Hello World!"));</script>
+     *
+     * Ex: addHeaderScript({}, () => alert("Hello World!"), false)
+     *
+     * Result: <script>() => alert("Hello World!")</script>
      * @param {{[p:string]: string|boolean}} attributes
      * @param {Function} content
+     * @param {boolean} waitDomContentLoaded
      */
-    addBodyScript(attributes, content = null) {
-        if (typeof content === "function")
-            attributes.children = `document.addEventListener('DOMContentLoaded', ${content.toString()});`;
+    addBodyScript(attributes, content = null, waitDomContentLoaded = true) {
+        if (typeof content === "function") {
+            if (waitDomContentLoaded)
+                attributes.children = `document.addEventListener('DOMContentLoaded', ${content.toString()});`;
+            else
+                content.toString();
+        }
 
         this.#bodyScripts.push(this.#parseTag("script", attributes));
         return this;
