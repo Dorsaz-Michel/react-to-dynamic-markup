@@ -94,8 +94,9 @@ ${this.#listeners.join('\n\n')}
 
         if (element instanceof Array) {
             let html = "";
-            for (const el of element) {
-                html += await this.#renderToString(el);
+            for (let i = 0; i < element.length; i++) {
+                element[i].key = i;
+                html += await this.#renderToString(element[i]);
             }
             return html;
         }
