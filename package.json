@@ -12,6 +12,7 @@
   "scripts": {
     "update-folder": "node updateFolder.js"
   },
+  "types": "./types.d.ts",
   "keywords": [
     "JS",
     "JSX",
