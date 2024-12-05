@@ -189,7 +189,7 @@ ${this.#listeners.join('\n\n')}
      *
      * EX: use: renderToDynamicMarkup(Page({ id: "page"}, document)) instead of: renderToDynamicMarkup(<Page id="page" />)
      *
-     * @param {(component:Object, props:Object) => Promise<Object>} createComponent
+     * @param {(component:Function, props:Object) => Promise<Object>} createComponent
      */
     setCreateComponentCallback(createComponent) {
         this.#createComponent = createComponent;
@@ -259,7 +259,7 @@ ${this.#listeners.join('\n\n')}
      *
      * Result: <style media="all and (max-width: 500px)">p {color: #26b72b;} code {font-weight: bold;}</style>
      * @param {{[p:string]: string|boolean}} attributes
-     * @param {string} content
+     * @param {string?} content
      */
     addStyle(attributes, content = "") {
         if (content)
@@ -284,8 +284,8 @@ ${this.#listeners.join('\n\n')}
      *
      * Result: <script>() => alert("Hello World!")</script>
      * @param {{[p:string]: string|boolean}} attributes
-     * @param {Function|string} content
-     * @param {boolean} waitDomContentLoaded
+     * @param {Function|string|undefined} content
+     * @param {boolean?} waitDomContentLoaded
      */
     addHeaderScript(attributes, content = null, waitDomContentLoaded = true) {
 
@@ -317,12 +317,12 @@ ${this.#listeners.join('\n\n')}
      *
      * Result: <script>document.addEventListener('DOMContentLoaded', () => alert("Hello World!"));</script>
      *
-     * Ex: addHeaderScript({}, () => alert("Hello World!"), false)
+     * Ex: addBodyScript({}, () => alert("Hello World!"), false)
      *
      * Result: <script>() => alert("Hello World!")</script>
      * @param {{[p:string]: string|boolean}} attributes
-     * @param {Function|string} content
-     * @param {boolean} waitDomContentLoaded
+     * @param {Function|string|undefined} content
+     * @param {boolean?} waitDomContentLoaded
      */
     addBodyScript(attributes, content = null, waitDomContentLoaded = true) {
 

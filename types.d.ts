@@ -1,10 +1,12 @@
+import {ReactElement} from "react";
+
 export default class Document {
     /**
      * The document reflect the DOM, with method to modify information such as lang title, metas, links, scripts...
      *
      * The method renderToDynamicMarkup creates the HTML string including setup script for listeners and doctype, html, head & body tags
      */
-    constructor() {}
+    constructor()
 
     /**
      * Transform a React element into a valid HTML string which includes a setup script for listeners (no client-side hydration)
@@ -29,7 +31,7 @@ export default class Document {
      * @param reactElement
      * @return {Promise<string>}
      */
-    async renderToDynamicMarkup(reactElement) {}
+    renderToDynamicMarkup(reactElement: ReactElement) : Promise<string>
 
 
     /**
@@ -48,7 +50,7 @@ export default class Document {
      *
      * @param {(component:Object, props:Object) => Promise<Object>} createComponent
      */
-    setCreateComponentCallback(createComponent) {}
+    setCreateComponentCallback(createComponent: (component: Function, props: Object) => ReactElement|Promise<ReactElement>) : this
 
     /**
      * Set html "lang" attribute
@@ -58,7 +60,7 @@ export default class Document {
      * Result: <html lang='fr'>
      * @param {string} lang
      */
-    setLang(lang) {}
+    setLang(lang: string) : this
 
     /**
      * Set document's title
@@ -68,7 +70,7 @@ export default class Document {
      * Result: <title>Hello</title>
      * @param {string} title
      */
-    setTitle(title) {}
+    setTitle(title: string) : this
 
     /**
      * Add header meta tag
@@ -78,7 +80,7 @@ export default class Document {
      * Result: <meta name="keywords" content="HTML, CSS, JavaScript" />
      * @param {{[p:string]: string|boolean}} attributes
      */
-    addMeta(attributes) {}
+    addMeta(attributes: {[p:string]: string|boolean}) : this
 
     /**
      * Add header link tag
@@ -88,7 +90,7 @@ export default class Document {
      * Result: <link href="main.css" rel="stylesheet" />
      * @param {{[p:string]: string|boolean}} attributes
      */
-    addLink(attributes) {}
+    addLink(attributes: {[p:string]: string|boolean}): this
 
     /**
      * Add header style tag
@@ -101,9 +103,9 @@ export default class Document {
      *
      * Result: <style media="all and (max-width: 500px)">p {color: #26b72b;} code {font-weight: bold;}</style>
      * @param {{[p:string]: string|boolean}} attributes
-     * @param {string} content
+     * @param {string?} content
      */
-    addStyle(attributes, content = "") {}
+    addStyle(attributes: {[p:string]: string|boolean}, content: string|undefined): this
 
     /**
      * Add header script
@@ -120,10 +122,10 @@ export default class Document {
      *
      * Result: <script>() => alert("Hello World!")</script>
      * @param {{[p:string]: string|boolean}} attributes
-     * @param {Function|string} content
-     * @param {boolean} waitDomContentLoaded
+     * @param {Function|string|undefined} content
+     * @param {boolean?} waitDomContentLoaded
      */
-    addHeaderScript(attributes, content = null, waitDomContentLoaded = true) {}
+    addHeaderScript(attributes: {[p:string]: string|boolean}, content: Function|string|undefined, waitDomContentLoaded: boolean|undefined): this
 
     /**
      * Add body script (at the end of the body, before the listeners)
@@ -136,14 +138,14 @@ export default class Document {
      *
      * Result: <script>document.addEventListener('DOMContentLoaded', () => alert("Hello World!"));</script>
      *
-     * Ex: addHeaderScript({}, () => alert("Hello World!"), false)
+     * Ex: addBodyScript({}, () => alert("Hello World!"), false)
      *
      * Result: <script>() => alert("Hello World!")</script>
      * @param {{[p:string]: string|boolean}} attributes
-     * @param {Function|string} content
-     * @param {boolean} waitDomContentLoaded
+     * @param {Function|string|undefined} content
+     * @param {boolean?} waitDomContentLoaded
      */
-    addBodyScript(attributes, content = null, waitDomContentLoaded = true) {}
+    addBodyScript(attributes: {[p:string]: string|boolean}, content: Function|string|undefined, waitDomContentLoaded: boolean|undefined): this
 
     /**
      * Set "no script" tag content
@@ -153,5 +155,5 @@ export default class Document {
      * Result: <noscript>Unable to run scripts !</noscript>
      * @param {string} content
      */
-    setNoScript(content) {}
-};
+    setNoScript(content: string) : this
+}
