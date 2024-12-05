@@ -69,7 +69,7 @@ const React = require("react");
 const app = express();
 const Document = require("react-to-dynamic-markup");
 
-const Page = require('./Page'); // Importer le composant React
+const Page = require('./Page'); // Import the React component
 
 app.use('/renderToStaticMarkup', async (request, response) => {
     const html = renderToStaticMarkup(<Page />);
@@ -98,13 +98,13 @@ app.use('/renderToDynamicMarkup', async (request, response) => {
 
 const PORT = 3000;
 app.listen(PORT, () => {
-    console.log(`Serveur démarré sur http://localhost:${PORT}`);
+    console.log(`Server started on http://localhost:${PORT}`);
 });
 ```
 
 index.js
 ```
-require('./babel-register'); // Charger Babel pour JSX
+require('./babel-register'); // Load Babel for JSX
 const React = require('react');
 
 require("./app.js");
