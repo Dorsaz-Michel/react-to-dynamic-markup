@@ -105,7 +105,7 @@ export default class Document {
      * @param {{[p:string]: string|boolean}} attributes
      * @param {string?} content
      */
-    addStyle(attributes: {[p:string]: string|boolean}, content: string|undefined): this
+    addStyle(attributes: {[p:string]: string|boolean}, content?: string): this
 
     /**
      * Add header script
@@ -125,7 +125,7 @@ export default class Document {
      * @param {Function|string|undefined} content
      * @param {boolean?} waitDomContentLoaded
      */
-    addHeaderScript(attributes: {[p:string]: string|boolean}, content: Function|string|undefined, waitDomContentLoaded: boolean|undefined): this
+    addHeaderScript(attributes: {[p:string]: string|boolean}, content?: Function|string, waitDomContentLoaded?: boolean): this
 
     /**
      * Add body script (at the end of the body, before the listeners)
@@ -145,7 +145,7 @@ export default class Document {
      * @param {Function|string|undefined} content
      * @param {boolean?} waitDomContentLoaded
      */
-    addBodyScript(attributes: {[p:string]: string|boolean}, content: Function|string|undefined, waitDomContentLoaded: boolean|undefined): this
+    addBodyScript(attributes: {[p:string]: string|boolean}, content?: Function|string, waitDomContentLoaded?: boolean): this
 
     /**
      * Set "no script" tag content
