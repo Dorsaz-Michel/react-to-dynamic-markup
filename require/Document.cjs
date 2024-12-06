@@ -14,7 +14,7 @@ module.exports = class Document {
     #noScript = "Your browser does not support JavaScript!";
     #listeners = [];
 
-    #createComponent = async (component, props) => component(props);
+    #createComponent = async (component, props, children) => component(props, children);
 
     /**
      * The document reflect the DOM, with method to modify information such as lang title, metas, links, scripts...
@@ -118,7 +118,7 @@ ${this.#listeners.join('\n\n')}
         // Manage functional components
         if (typeof type === 'function') {
             if (props.children)
-                return await this.#renderToString(await this.#createComponent(type, {...props, children: await this.#renderToString(props.children)}));
+                return await this.#renderToString(await this.#createComponent(type, props, await this.#renderToString(props.children)));
             else
                 return await this.#renderToString(await this.#createComponent(type, props));
         }
@@ -182,14 +182,14 @@ ${this.#listeners.join('\n\n')}
      *
      * It can be used by example to add document as second property of any component created
      *
-     * Ex: setCreateComponentCallback(async (component, props) => component(props, doc));
+     * Ex: setCreateComponentCallback(async (component, props, children) => component(props, doc, children));
      *
      * Note: It doesn't affect root component ! But you can do it by calling root component as a function when
      * using renderToDynamicMarkup:
      *
      * EX: use: renderToDynamicMarkup(Page({ id: "page"}, document)) instead of: renderToDynamicMarkup(<Page id="page" />)
      *
-     * @param {(component:Function, props:Object) => Promise<Object>} createComponent
+     * @param {(component:Function, props:Object, children?:Object) => Promise<Object>} createComponent
      */
     setCreateComponentCallback(createComponent) {
         this.#createComponent = createComponent;

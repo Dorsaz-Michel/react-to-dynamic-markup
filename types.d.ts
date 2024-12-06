@@ -41,7 +41,7 @@ export default class Document {
      *
      * It can be used by example to add document as second property of any component created
      *
-     * Ex: setCreateComponentCallback(async (component, props) => component(props, doc));
+     * Ex: setCreateComponentCallback(async (component, props, children) => component(props, doc, children));
      *
      * Note: It doesn't affect root component ! But you can do it by calling root component as a function when
      * using renderToDynamicMarkup:
