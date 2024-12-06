@@ -48,9 +48,9 @@ export default class Document {
      *
      * EX: use: renderToDynamicMarkup(Page({ id: "page"}, document)) instead of: renderToDynamicMarkup(<Page id="page" />)
      *
-     * @param {(component:Object, props:Object) => Promise<Object>} createComponent
+     * @param {(component:Object, props:Object, children?:Object) => Promise<Object>} createComponent
      */
-    setCreateComponentCallback(createComponent: (component: Function, props: Object) => ReactElement|Promise<ReactElement>) : this
+    setCreateComponentCallback(createComponent: (component: Function, props: Object, children?:ReactElement) => ReactElement|Promise<ReactElement>) : this
 
     /**
      * Set html "lang" attribute
