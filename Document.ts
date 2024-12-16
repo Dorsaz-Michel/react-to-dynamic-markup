@@ -1,15 +1,17 @@
-import {Component, ReactElement, ReactNode} from "react";
+import React, {Component, ReactElement, ReactNode} from "react";
 
 type ClassComponent = new(props: object, deprecatedLegacyContext?: any) => Component<any, any>;
 type FunctionComponent = (props: object, deprecatedLegacyContext?: any) => ReactNode;
 
-type ClassComponentCallback = (component: ClassComponent, props: object, children?: ReactNode) => Promise<any>;
-type FunctionComponentCallback = (component: FunctionComponent, props: object, children?: ReactNode) => Promise<any>;
+type ClassComponentCallback = (document: Document, component: ClassComponent, props: object, children?: ReactNode) => Promise<Component<any, any>>;
+type FunctionComponentCallback = (document: Document, component: FunctionComponent, props: object, children?: ReactNode) => Promise<ReactNode>;
+
+type ComponentFactory = <ReturnType>(document: Document, component: (...args: any[]) => ReturnType, props: object, children?: ReactNode) => ReturnType;
 
 export default class Document {
 
-    static #createClassComponent: ClassComponentCallback = async (component, props, children) => new component(props, children);
-    static #createFunctionComponent: FunctionComponentCallback = async (component, props, children) => component(props, children);
+    static #createClassComponent: ClassComponentCallback = async (document, component, props, children) => new component(props, children);
+    static #createFunctionComponent: FunctionComponentCallback = async (document, component, props, children) => component(props, children);
 
     /**
      * Set the createClassComponent callback
@@ -26,8 +28,15 @@ export default class Document {
      * EX: use: renderToDynamicMarkup(Page({ id: "page"}, document)) instead of: renderToDynamicMarkup(<Page id="page" />)
      *
      */
-    static setClassComponentCallback(createComponent: ClassComponentCallback) {
-        this.#createClassComponent = createComponent;
+    static componentFactory(factory: ComponentFactory) {
+        this.#createClassComponent = async (document, classComponent, props, children) => {
+            return factory<Component<any, any>>(document, (...args: [any]) => new classComponent(...args), props, children);
+        };
+
+
+        this.#createFunctionComponent = async (document, functionComponent, props, children) => {
+            return factory<ReactNode>(document, (...args: [any]) => functionComponent(...args), props, children);
+        };
         return this;
     }
 
@@ -175,12 +184,14 @@ export default class Document {
             return await this.#parseTag(type, props);
 
         // Manage class components
-        if (type.prototype)
-            return await this.#renderToString(await Document.#createClassComponent(type as ClassComponent, props, props.children));
+        if (type.prototype) {
+            const component = await Document.#createClassComponent(this, type as ClassComponent, props, props.children);
+            return await this.#renderToString(component.render());
+        }
 
         // Manage function components
         if (typeof type === 'function') {
-            return await this.#renderToString(await Document.#createFunctionComponent(type as FunctionComponent, props, props.children));
+            return await this.#renderToString(await Document.#createFunctionComponent(this, type as FunctionComponent, props, props.children));
         }
 
         return "";
